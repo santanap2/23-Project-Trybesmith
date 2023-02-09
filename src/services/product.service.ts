@@ -9,6 +9,11 @@ class ProductService {
     this.model = new ProductModel(connection);
   }
 
+  public async insertProduct(product: IProduct) : Promise<IProduct> {
+    const result = await this.model.insertProduct(product);
+    return result;
+  }
+
   public async getAll() : Promise<IProduct[]> {
     const result = await this.model.getAll();
     return result;
