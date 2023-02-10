@@ -4,31 +4,31 @@ interface IOrder {
   productsIds: number[],
 }
 
-interface IOrderToken {
-  authorization: any,
+interface ICreateOrder {
   productsIds: number[],
+  authorization: any,
 }
 
 interface IObjModel {
-  result: object,
+  result: {
+    insertId: number,
+  },
   id: number,
 }
 
-// interface IToken {
-//   id: number,
-//   username: string,
-//   vocation: string,
-//   level: number,
-//   password: string,
-//   iat: number
-// }
+interface IToken {
+  id: number,
+}
 
-// interface ITest {
-//   token: IToken,
-//   productsIds: number[]
-// }
+interface IOrderService {
+  code?: number | null,
+  message: string | object,
+}
 
 export {
   IOrder,
-  IOrderToken,
+  ICreateOrder,
+  IObjModel,
+  IToken,
+  IOrderService,
 };

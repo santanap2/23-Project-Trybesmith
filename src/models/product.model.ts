@@ -26,7 +26,7 @@ class ProductModel {
     return rows as IProduct[];
   }
 
-  public async updateProduct(productsIds: number[], orderId: number): Promise<any> {
+  public async updateProduct(productsIds: number[], orderId: number): Promise<object> {
     const query = 'UPDATE Trybesmith.products SET order_id = (?) WHERE id = (?)';
     const [result] = await Promise.all(
       productsIds.map((productId) => this.connection.execute(query, [orderId, productId])),

@@ -1,5 +1,6 @@
+import { JwtPayload } from 'jsonwebtoken';
 import { Pool } from 'mysql2/promise';
-import { IOrder } from '../interfaces/order.interface';
+import { IObjModel, IOrder } from '../interfaces/order.interface';
 
 class OrderModel {
   public connection: Pool;
@@ -18,12 +19,12 @@ class OrderModel {
     return result as IOrder[];
   }
 
-  public async createOrder(object: any) : Promise<any> {
+  public async createOrder(object: JwtPayload) : Promise<IObjModel> {
     const { id } = object;
     
     const query = 'INSERT INTO Trybesmith.orders (user_id) VALUE (?)';
     const [result] = await this.connection.execute(query, [id]);
-    return { result, id };
+    return { result, id } as IObjModel;
   }
 }
 

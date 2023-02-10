@@ -1,7 +1,8 @@
+import { JwtPayload } from 'jsonwebtoken';
 import connection from '../models/connection';
 import OrderModel from '../models/order.model';
 import ProductModel from '../models/product.model';
-import { IOrder, IOrderToken } from '../interfaces/order.interface';
+import { IOrder, ICreateOrder, IOrderService } from '../interfaces/order.interface';
 import JWT from '../jwt/jwt';
 import OrderValidation from './validations/order.validation';
 
@@ -20,22 +21,24 @@ class OrderService {
     return result;
   }
 
-  public async createOrder(object : IOrderToken) : Promise<any> {
-    const { authorization, productsIds } = object;
+  public async createOrder(object : ICreateOrder) : Promise<IOrderService> {
+    const { authorization, productsIds } = object as ICreateOrder;
 
     const authError = OrderValidation.authValidation(authorization);
     if (authError) return authError;
 
-    const token = JWT.authToken(authorization);
+    const token = JWT.authToken(authorization) as JwtPayload;
     if (!token) return { code: 401, message: 'Invalid token' };
 
     const productIdError = OrderValidation.productsIdsValidation(productsIds);
     if (productIdError) return productIdError;
 
     const { result: { insertId: orderId }, id } = await this.model.createOrder(token);
-    const xamps = await this.productModel.updateProduct(productsIds, orderId);
+    const result = await this.productModel.updateProduct(productsIds, orderId);
 
-    if (xamps) return { message: { userId: id, productsIds } };    
+    if (result) return { code: null, message: { userId: id, productsIds } };
+
+    return { code: 500, message: 'Some error ocurred' };
   }
 }
 
