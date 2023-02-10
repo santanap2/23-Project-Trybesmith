@@ -25,6 +25,14 @@ class ProductModel {
     const [rows] = result;
     return rows as IProduct[];
   }
+
+  public async updateProduct(productsIds: number[], orderId: number): Promise<any> {
+    const query = 'UPDATE Trybesmith.products SET order_id = (?) WHERE id = (?)';
+    const [result] = await Promise.all(
+      productsIds.map((productId) => this.connection.execute(query, [orderId, productId])),
+    );
+    return result;
+  }
 }
 
 export default ProductModel;

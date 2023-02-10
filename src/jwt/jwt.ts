@@ -16,7 +16,7 @@ const authToken = (token: string) => {
     const verified = jwt.verify(token, process.env.JWT_SECRET as Secret);
     return verified;
   } catch (error) {
-    return { type: 'AUTH_FAILED', message: 'Expired or invalid token' };
+    return null;
   }
 };
 

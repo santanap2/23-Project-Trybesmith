@@ -1,5 +1,5 @@
 import { Pool } from 'mysql2/promise';
-import IOrder from '../interfaces/order.interface';
+import { IOrder } from '../interfaces/order.interface';
 
 class OrderModel {
   public connection: Pool;
@@ -16,6 +16,14 @@ class OrderModel {
     GROUP BY orders.id`;
     const [result] = await this.connection.execute(query);
     return result as IOrder[];
+  }
+
+  public async createOrder(object: any) : Promise<any> {
+    const { id } = object;
+    
+    const query = 'INSERT INTO Trybesmith.orders (user_id) VALUE (?)';
+    const [result] = await this.connection.execute(query, [id]);
+    return { result, id };
   }
 }
 
