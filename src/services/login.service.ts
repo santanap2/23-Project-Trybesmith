@@ -11,11 +11,11 @@ class LoginService {
   }
 
   public async createLogin(user: ILogin) : Promise<{ type: string | null, message: string }> {
-    const { userData } = await this.model.createLogin(user);
+    const userData = await this.model.createLogin(user);
     if (!userData) return { type: 'WRONG_FIELDS', message: 'Username or password invalid' };
 
-    const { id, username: usernamee, vocation, level, password: passwordd } = userData;
-    const object = { id, username: usernamee, vocation, level, password: passwordd };
+    const { id, username, vocation, level, password } = userData;
+    const object = { id, username, vocation, level, password };
 
     const token = jwt.generateToken(object);
     return { type: null, message: token };
