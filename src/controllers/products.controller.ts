@@ -5,8 +5,15 @@ class ProductController {
   constructor(private productService = new ProductService()) { }
 
   public insertProduct = async (req: Request, res: Response) => {
-    const newProduct = await this.productService.insertProduct(req.body);
-    return res.status(201).json(newProduct);
+    const { name, amount } = req.body;
+    
+    if (!name) return res.status(400).json({ message: '"name" is required' });
+    if (!amount) return res.status(400).json({ message: '"amount" is required' });
+
+    const { type, message } = await this.productService.insertProduct(req.body);
+    if (type) return res.status(422).json({ message });
+    
+    return res.status(201).json(message);
   };
 
   public getAll = async (_req: Request, res: Response) => {
